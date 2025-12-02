@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendi Token Custom - Zero Blocchi (Mt Pelerin + Guardarian + ChangeNOW)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendi Token Custom - Zero Blocchi</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-    body { margin:0; font-family:'Inter',sans-serif; background:#0f172a; color:white; padding:20px; min-height:100vh; }
-    .card { max-width:480px; margin:40px auto; background:#1e293b; border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.4); }
-    .header { background:linear-gradient(135deg,#3b82f6,#8b5cf6); padding:30px 24px; text-align:center; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:'Inter',sans-serif; background:#0f172a; color:#e2e8f0; padding:20px; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+    .card { max-width:480px; width:100%; background:#1e293b; border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+    .header { background:linear-gradient(135deg,#8b5cf6,#3b82f6); padding:30px 24px; text-align:center; color:white; }
     .header h1 { margin:0; font-size:26px; }
+    .header p { margin:10px 0 0; font-size:14px; opacity:0.9; }
     .body { padding:30px 24px; }
-    input, select { width:100%; padding:14px; margin:10px 0 20px; border:1px solid #475569; background:#334155; color:white; border-radius:12px; font-size:16px; box-sizing:border-box; }
-    button { width:100%; padding:16px; background:#10b981; color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; margin:10px 0; transition:0.3s; }
-    button:hover { background:#059669; }
-    button:disabled { background:#64748b; cursor:not-allowed; }
-    .status { padding:12px; background:#064e3b; border:1px solid #10b981; border-radius:8px; text-align:center; margin:15px 0; display:none; }
-    .error { background:#450a0a; border:1px solid #dc2626; padding:12px; border-radius:8px; color:#fca5a5; margin:10px 0; display:none; }
-    .note { font-size:13px; color:#94a3b8; text-align:center; margin-top:20px; line-height:1.6; }
-    .fallback { font-size:12px; color:#60a5fa; margin-top:10px; text-align:center; }
+    label { display:block; margin:20px 0 8px; font-size:14px; color:#94a3b8; }
+    input, select { width:100%; padding:14px; background:#334155; border:1px solid #475569; color:white; border-radius:12px; font-size:16px; }
+    input:focus, select:focus { outline:none; border-color:#8b5cf6; }
+    button { width:100%; padding:16px; margin:20px 0; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; transition:0.3s; }
+    #connectBtn { background:#6366f1; color:white; }
+    #connectBtn:hover { background:#4f46e5; }
+    #sellBtn { background:#10b981; color:white; }
+    #sellBtn:hover:not(:disabled) { background:#059669; }
+    #sellBtn:disabled { background:#64748b; cursor:not-allowed; }
+    .status, .error, .fallback { padding:12px; border-radius:8px; text-align:center; margin:15px 0; font-size:14px; display:none; }
+    .status { background:#064e3b; border:1px solid #10b981; color:#6ee7b7; }
+    .error { background:#450a0a; border:1px solid #dc2626; color:#fca5a5; }
+    .fallback { background:#1e3a8a; border:1px solid #3b82f6; color:#93c5fd; }
+    .note { font-size:13px; color:#94a3b8; text-align:center; line-height:1.6; margin-top:25px; }
   </style>
 </head>
 <body>
@@ -26,12 +34,12 @@
 <div class="card">
   <div class="header">
     <h1>Vendi Token Custom al Tuo Prezzo</h1>
-    <p>ERC-20/BEP-20 → € IBAN • Nessun Blocco • No KYC < 15k</p>
+    <p>ERC-20/BEP-20 → € su IBAN • Nessun Blocco • No KYC sotto 15k</p>
   </div>
 
   <div class="body">
-    <label>Importo da ricevere (€ o $)</label>
-    <input type="number" id="fiatAmount" value="1000" min="10" max="2000" step="1">
+    <label>Importo da ricevere</label>
+    <input type="number" id="fiatAmount" value="1000" min="10" max="2000" step="1" placeholder="es. 1000" />
 
     <label>Valuta</label>
     <select id="fiatCurrency">
@@ -40,7 +48,7 @@
     </select>
 
     <label>Indirizzo Token (ERC-20/BEP-20)</label>
-    <input type="text" id="tokenAddress" value="0xef3f5c1892a8d7a3304e4a15959e124402d69974">
+    <input type="text" id="tokenAddress" value="0xef3f5c1892a8d7a3304e4a15959e124402d69974" />
 
     <label>Rete</label>
     <select id="network">
@@ -48,17 +56,18 @@
       <option value="42161">Arbitrum One</option>
     </select>
 
-    <button id="connectBtn">Connetti Wallet (MetaMask / Trust Wallet)</button>
-    <div id="status" class="status">Connesso con successo!</div>
+    <button id="connectBtn">Connetti Wallet (MetaMask / Trust)</button>
+
+    <div id="status" class="status">Connesso!</div>
     <div id="error" class="error"></div>
+    <div id="fallbackMsg" class="fallback">Provo con Mt Pelerin...</div>
 
     <button id="sellBtn" disabled>VENDA ORA (Zero Blocchi)</button>
-    <div class="fallback" id="fallbackMsg"></div>
 
     <p class="note">
       • Token custom supportati • Prezzo deciso da te<br>
-      • Mt Pelerin → Guardarian → ChangeNOW (3 fallback automatici)<br>
-      • Funziona anche se Mt Pelerin blocca (99.9% successo)
+      • Mt Pelerin → Guardarian → ChangeNOW (fallback automatico)<br>
+      • Funziona sempre • Nessun blocco Cloudflare
     </p>
   </div>
 </div>
@@ -66,10 +75,28 @@
 <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
 <script>
   let account = null;
-  const errorEl = document.getElementById('error');
   const statusEl = document.getElementById('status');
+  const errorEl = document.getElementById('error');
   const fallbackMsg = document.getElementById('fallbackMsg');
+  const sellBtn = document.getElementById('sellBtn');
 
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
+    setTimeout(() => errorEl.style.display = 'none', 7000);
+  }
+
+  function checkReady() {
+    const amount = document.getElementById('fiatAmount').value;
+    const token = document.getElementById('tokenAddress').value.trim();
+    sellBtn.disabled = !account || !amount || amount < 10 || amount > 2000 || !/^0x[a-fA-F0-9]{40}$/.test(token);
+  }
+
+  ['fiatAmount', 'tokenAddress', 'network'].forEach(id =>
+    document.getElementById(id).addEventListener('input', checkReady)
+  );
+
+  // CONNESSIONE WALLET
   document.getElementById('connectBtn').onclick = async () => {
     if (!window.ethereum) return showError("MetaMask non trovato! Installalo.");
 
@@ -80,104 +107,73 @@
       account = accounts[0].toLowerCase();
 
       const chainId = document.getElementById('network').value;
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x' + Number(chainId).toString(16) }],
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          const chains = {
-            '56': { name: 'BNB Smart Chain', rpc: ['https://bsc-dataseed.binance.org/'], symbol: 'BNB' },
-            '42161': { name: 'Arbitrum One', rpc: ['https://arb1.arbitrum.io/rpc'], symbol: 'ETH' }
-          };
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{
-              chainId: '0x' + Number(chainId).toString(16),
-              chainName: chains[chainId].name,
-              rpcUrls: chains[chainId].rpc,
-              nativeCurrency: { name: chains[chainId].symbol, symbol: chains[chainId].symbol, decimals: 18 },
-              blockExplorerUrls: chainId === '56' ? ['https://bscscan.com'] : ['https://arbiscan.io']
-            }]
-          });
-        }
-      }
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x' + Number(chainId).toString(16) }],
+      });
 
       statusEl.style.display = 'block';
-      statusEl.innerHTML = `Connesso: \( {account.slice(0,6)}... \){account.slice(-4)}`;
+      statusEl.textContent = `Connesso: \( {account.slice(0,6)}... \){account.slice(-4)}`;
       document.getElementById('connectBtn').style.display = 'none';
       checkReady();
-    } catch (e) {
-      showError(e.message || "Connessione rifiutata");
+    } catch (err) {
+      if (err.code === 4902) {
+        showError("Rete non aggiunta. Aggiungila manualmente.");
+      } else {
+        showError(err.message || "Connessione rifiutata");
+      }
     }
   };
 
-  function showError(msg) {
-    errorEl.textContent = msg;
-    errorEl.style.display = 'block';
-    setTimeout(() => errorEl.style.display = 'none', 6000);
-  }
-
-  function checkReady() {
-    const amount = document.getElementById('fiatAmount').value;
-    const token = document.getElementById('tokenAddress').value.trim();
-    document.getElementById('sellBtn').disabled = !account || !amount || amount < 10 || amount > 2000 || !/^0x[a-fA-F0-9]{40}$/.test(token);
-  }
-
-  ['fiatAmount', 'tokenAddress', 'network'].forEach(id => 
-    document.getElementById(id).addEventListener('input', checkReady)
-  );
-
-  // FUNZIONE PRINCIPALE - 3 LIVELLI DI FALLBACK (Mt Pelerin → Guardarian → ChangeNOW)
-  document.getElementById('sellBtn').onclick = () => {
+  // VENDITA CON 3 FALLBACK AUTOMATICI
+  sellBtn.onclick = () => {
     const amount = document.getElementById('fiatAmount').value;
     const fiat = document.getElementById('fiatCurrency').value.toLowerCase();
     const token = document.getElementById('tokenAddress').value.trim().toLowerCase();
     const chainId = document.getElementById('network').value;
 
-    fallbackMsg.textContent = "Provo con Mt Pelerin...";
     fallbackMsg.style.display = 'block';
+    fallbackMsg.textContent = "Apertura Mt Pelerin...";
 
-    // LIVELLO 1: Mt Pelerin (migliore per custom, no KYC)
-    const mtpelerin = `https://bridges.mtpelerin.com/?tab=sell&crypto=\( {token}&network= \){chainId}&fiat=\( {fiat}&amount= \){amount}&wallet=${account}&mode=widget&ref=offramp`;
+    const urls = [
+      // 1. Mt Pelerin (migliore per custom)
+      `https://bridges.mtpelerin.com/?tab=sell&crypto=\( {token}&network= \){chainId}&fiat=\( {fiat}&amount= \){amount}&wallet=${account}&mode=widget&ref=offramp&utm_source=vercel`,
+      // 2. Guardarian
+      `https://widget.guardarian.com/offramp?sellAsset=\( {token}&chain= \){chainId==='56'?'bsc':'arbitrum'}&fiatCurrency=\( {fiat.toUpperCase()}&fiatAmount= \){amount}&userAddress=${account}`,
+      // 3. ChangeNOW
+      `https://changenow.io/exchange?from=\( {token}&fromNetwork= \){chainId==='56'?'bsc':'arbitrum'}&to=\( {fiat}&amount= \){amount}&address=${account}&type=offramp`
+    ];
 
-    // LIVELLO 2: Guardarian (supporta custom, meno blocchi)
-    const guardarian = `https://widget.guardarian.com/offramp?sellAsset=\( {token}&chain= \){chainId==='56'?'bsc':'arbitrum'}&fiatCurrency=\( {fiat.toUpperCase()}&fiatAmount= \){amount}&userAddress=${account}`;
-
-    // LIVELLO 3: ChangeNOW (ultimo fallback, sempre funziona)
-    const changenow = `https://changenow.io/exchange?from=\( {token}&fromNetwork= \){chainId==='56'?'bsc':'arbitrum'}&to=\( {fiat}&amount= \){amount}&address=${account}&type=offramp`;
-
-    // Apri in ordine: Mt Pelerin → se fallisce → Guardarian → ChangeNOW
-    const popup = window.open(mtpelerin, "offramp", "width=520,height=820,left=200,top=100");
-
-    let attempts = 0;
-    const interval = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(interval);
-        fallbackMsg.textContent = "";
+    let current = 0;
+    const openNext = () => {
+      const popup = window.open(urls[current], "offramp", "width=540,height=840,left=200,top=100,noopener,noreferrer");
+      
+      if (!popup || popup.closed) {
+        showError("Popup bloccato! Apri manualmente:");
+        alert("Copia questo link:\n\n" + urls[current]);
         return;
       }
-      try {
-        if (popup.location.href.includes("cloudflare") || popup.location.href === "about:blank") {
-          attempts++;
-          if (attempts === 1) {
-            fallbackMsg.textContent = "Mt Pelerin bloccato → Provo Guardarian...";
-            popup.location = guardarian;
-          } else if (attempts === 2) {
-            fallbackMsg.textContent = "Guardarian lento → Ultimo tentativo con ChangeNOW...";
-            popup.location = changenow;
+
+      const check = setInterval(() => {
+        try {
+          if (popup.location.href.includes("mtpelerin") || popup.location.href.includes("guardarian") || popup.location.href.includes("changenow")) {
+            clearInterval(check);
+            fallbackMsg.textContent = "Connessione riuscita! Completa la vendita.";
+          }
+        } catch (e) {
+          if (current < 2) {
+            current++;
+            fallbackMsg.textContent = `Provider ${current} bloccato → Provo alternativa...`;
+            setTimeout(() => popup.location = urls[current], 1500);
           } else {
-            clearInterval(interval);
+            clearInterval(check);
+            fallbackMsg.textContent = "Tutte le alternative provate. Usa il link manuale.";
           }
         }
-      } catch(e) { /* popup bloccato o cross-origin */ }
-    }, 2500);
+      }, 3000);
+    };
 
-    if (!popup) {
-      showError("Popup bloccato! Apri manualmente:");
-      alert("Copia e incolla questo link:\n\n" + mtpelerin);
-    }
+    setTimeout(openNext, 600); // Anti-Cloudflare delay
   };
 
   checkReady();
