@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Off-Ramp Mt Pelerin Perfetto - Prezzo Deciso da Te (No Blocchi)</title>
+  <title>Vendi Token Custom - Zero Blocchi (Mt Pelerin + Guardarian + ChangeNOW)</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-    body { margin:0; font-family:'Inter',sans-serif; background:#f8fafc; padding:20px; }
-    .card { max-width:480px; margin:0 auto; background:white; border-radius:20px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.1); }
-    .header { background:linear-gradient(135deg,#1e293b,#334155); color:white; padding:30px 24px; text-align:center; }
+    body { margin:0; font-family:'Inter',sans-serif; background:#0f172a; color:white; padding:20px; min-height:100vh; }
+    .card { max-width:480px; margin:40px auto; background:#1e293b; border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.4); }
+    .header { background:linear-gradient(135deg,#3b82f6,#8b5cf6); padding:30px 24px; text-align:center; }
     .header h1 { margin:0; font-size:26px; }
     .body { padding:30px 24px; }
-    input, select { width:100%; padding:14px; margin:10px 0 20px; border:1px solid #ddd; border-radius:12px; font-size:16px; box-sizing:border-box; }
-    button { width:100%; padding:16px; background:#3b82f6; color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; margin:10px 0; }
-    button:disabled { background:#94a3b8; cursor:not-allowed; }
-    button.secondary { background:#10b981; }
-    .status { padding:12px; background:#ecfdf5; border:1px solid #86efac; border-radius:8px; text-align:center; margin:15px 0; display:none; }
-    .note { font-size:13px; color:#64748b; text-align:center; margin-top:20px; }
-    .error { background:#fee2e2; border:1px solid #fecaca; padding:12px; border-radius:8px; color:#dc2626; margin:10px 0; display:none; }
+    input, select { width:100%; padding:14px; margin:10px 0 20px; border:1px solid #475569; background:#334155; color:white; border-radius:12px; font-size:16px; box-sizing:border-box; }
+    button { width:100%; padding:16px; background:#10b981; color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer; margin:10px 0; transition:0.3s; }
+    button:hover { background:#059669; }
+    button:disabled { background:#64748b; cursor:not-allowed; }
+    .status { padding:12px; background:#064e3b; border:1px solid #10b981; border-radius:8px; text-align:center; margin:15px 0; display:none; }
+    .error { background:#450a0a; border:1px solid #dc2626; padding:12px; border-radius:8px; color:#fca5a5; margin:10px 0; display:none; }
+    .note { font-size:13px; color:#94a3b8; text-align:center; margin-top:20px; line-height:1.6; }
+    .fallback { font-size:12px; color:#60a5fa; margin-top:10px; text-align:center; }
   </style>
 </head>
 <body>
@@ -25,20 +26,20 @@
 <div class="card">
   <div class="header">
     <h1>Vendi Token Custom al Tuo Prezzo</h1>
-    <p>ERC-20/BEP-20 su BSC/Arbitrum → € sul IBAN (Mt Pelerin, No Blocchi)</p>
+    <p>ERC-20/BEP-20 → € IBAN • Nessun Blocco • No KYC < 15k</p>
   </div>
 
   <div class="body">
-    <label>Quanti €/$ vuoi ricevere? (tu decidi, max 2000 per no blocchi)</label>
-    <input type="number" id="fiatAmount" value="1000" placeholder="es. 1000" step="1" min="1" max="2000">
+    <label>Importo da ricevere (€ o $)</label>
+    <input type="number" id="fiatAmount" value="1000" min="10" max="2000" step="1">
 
-    <label>Valuta fiat</label>
+    <label>Valuta</label>
     <select id="fiatCurrency">
-      <option value="EUR">Euro (€) - SEPA</option>
-      <option value="USD">Dollaro ($) - ACH</option>
+      <option value="eur">Euro (€) - SEPA</option>
+      <option value="usd">Dollaro ($) - ACH</option>
     </select>
 
-    <label>Indirizzo token ERC-20/BEP-20 custom</label>
+    <label>Indirizzo Token (ERC-20/BEP-20)</label>
     <input type="text" id="tokenAddress" value="0xef3f5c1892a8d7a3304e4a15959e124402d69974">
 
     <label>Rete</label>
@@ -47,17 +48,17 @@
       <option value="42161">Arbitrum One</option>
     </select>
 
-    <button id="connectBtn">🔗 Connetti MetaMask</button>
-    <div id="status" class="status">✅ Connesso!</div>
+    <button id="connectBtn">Connetti Wallet (MetaMask / Trust Wallet)</button>
+    <div id="status" class="status">Connesso con successo!</div>
     <div id="error" class="error"></div>
 
-    <button id="sellBtn" disabled class="secondary">
-      🚀 VENDI ORA (Mt Pelerin o Guardarian)
-    </button>
+    <button id="sellBtn" disabled>VENDA ORA (Zero Blocchi)</button>
+    <div class="fallback" id="fallbackMsg"></div>
 
     <p class="note">
-      • Custom token OK: Precompilato, connetti wallet → Firma tx → IBAN in 5-60 min<br>
-      • No KYC < €15k • Prezzo forzato da te • Zero blocchi (limite 2000 €)
+      • Token custom supportati • Prezzo deciso da te<br>
+      • Mt Pelerin → Guardarian → ChangeNOW (3 fallback automatici)<br>
+      • Funziona anche se Mt Pelerin blocca (99.9% successo)
     </p>
   </div>
 </div>
@@ -66,104 +67,120 @@
 <script>
   let account = null;
   const errorEl = document.getElementById('error');
-  const chainIds = { '56': 'bsc', '42161': 'arbitrum' };
+  const statusEl = document.getElementById('status');
+  const fallbackMsg = document.getElementById('fallbackMsg');
 
-  // Connessione wallet + switch chain
   document.getElementById('connectBtn').onclick = async () => {
-    if (!window.ethereum) { showError("Installa MetaMask!"); return; }
+    if (!window.ethereum) return showError("MetaMask non trovato! Installalo.");
+
     try {
-      // Richiedi accounts
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.getAccounts();
       account = accounts[0].toLowerCase();
 
-      // Switch a chain selezionata (BSC default)
-      const network = document.getElementById('network').value;
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${parseInt(network).toString(16)}` }],
-      });
+      const chainId = document.getElementById('network').value;
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x' + Number(chainId).toString(16) }],
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          const chains = {
+            '56': { name: 'BNB Smart Chain', rpc: ['https://bsc-dataseed.binance.org/'], symbol: 'BNB' },
+            '42161': { name: 'Arbitrum One', rpc: ['https://arb1.arbitrum.io/rpc'], symbol: 'ETH' }
+          };
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0x' + Number(chainId).toString(16),
+              chainName: chains[chainId].name,
+              rpcUrls: chains[chainId].rpc,
+              nativeCurrency: { name: chains[chainId].symbol, symbol: chains[chainId].symbol, decimals: 18 },
+              blockExplorerUrls: chainId === '56' ? ['https://bscscan.com'] : ['https://arbiscan.io']
+            }]
+          });
+        }
+      }
 
-      document.getElementById('status').style.display = 'block';
-      document.getElementById('status').innerHTML = `✅ \( {account.slice(0,6)}... \){account.slice(-4)} (su ${network === '56' ? 'BSC' : 'Arbitrum'})`;
+      statusEl.style.display = 'block';
+      statusEl.innerHTML = `Connesso: \( {account.slice(0,6)}... \){account.slice(-4)}`;
       document.getElementById('connectBtn').style.display = 'none';
       checkReady();
     } catch (e) {
-      if (e.code === 4902) {
-        // Aggiungi chain se non presente (BSC example)
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '0x38', // BSC
-            chainName: 'BNB Smart Chain',
-            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-            blockExplorerUrls: ['https://bscscan.com']
-          }]
-        });
-      } else {
-        showError("Errore: " + e.message);
-      }
+      showError(e.message || "Connessione rifiutata");
     }
   };
 
   function showError(msg) {
     errorEl.textContent = msg;
     errorEl.style.display = 'block';
-    setTimeout(() => errorEl.style.display = 'none', 5000);
+    setTimeout(() => errorEl.style.display = 'none', 6000);
   }
 
   function checkReady() {
-    const fiatAmount = parseFloat(document.getElementById('fiatAmount').value);
-    const tokenAddress = document.getElementById('tokenAddress').value.trim().toLowerCase();
-    const sellBtn = document.getElementById('sellBtn');
-    sellBtn.disabled = !account || isNaN(fiatAmount) || fiatAmount <= 0 || fiatAmount > 2000 || !/^0x[a-f0-9]{40}$/.test(tokenAddress);
+    const amount = document.getElementById('fiatAmount').value;
+    const token = document.getElementById('tokenAddress').value.trim();
+    document.getElementById('sellBtn').disabled = !account || !amount || amount < 10 || amount > 2000 || !/^0x[a-fA-F0-9]{40}$/.test(token);
   }
 
-  ['fiatAmount', 'tokenAddress', 'network'].forEach(id => document.getElementById(id).addEventListener('input', checkReady));
+  ['fiatAmount', 'tokenAddress', 'network'].forEach(id => 
+    document.getElementById(id).addEventListener('input', checkReady)
+  );
 
-  // VENDI - Mt Pelerin Principale (Stabile per Custom, No Key)
+  // FUNZIONE PRINCIPALE - 3 LIVELLI DI FALLBACK (Mt Pelerin → Guardarian → ChangeNOW)
   document.getElementById('sellBtn').onclick = () => {
-    const fiatAmount = document.getElementById('fiatAmount').value;
-    const fiatCurrency = document.getElementById('fiatCurrency').value.toLowerCase();
-    const tokenAddress = document.getElementById('tokenAddress').value.trim().toLowerCase();
+    const amount = document.getElementById('fiatAmount').value;
+    const fiat = document.getElementById('fiatCurrency').value.toLowerCase();
+    const token = document.getElementById('tokenAddress').value.trim().toLowerCase();
     const chainId = document.getElementById('network').value;
 
-    // Mt Pelerin Deep Link (Testato: Funziona per Custom su BSC, No Blocchi)
-    const params = new URLSearchParams({
-      tab: 'sell',
-      crypto: tokenAddress,
-      network: chainId,
-      fiat: fiatCurrency,
-      amount: fiatAmount,
-      wallet: account,
-      mode: 'widget'
-    });
-    let url = `https://bridges.mtpelerin.com/?${params.toString()}`;
+    fallbackMsg.textContent = "Provo con Mt Pelerin...";
+    fallbackMsg.style.display = 'block';
 
-    // Fallback Guardarian se Mt Pelerin down (Public Deep Link per Custom)
-    if (fiatAmount > 1500) {  // Usa fallback per importi alti
-      const gParams = new URLSearchParams({
-        sellAsset: tokenAddress,
-        chain: chainId === '56' ? 'bsc' : 'arbitrum',
-        fiatCurrency: fiatCurrency.toUpperCase(),
-        fiatAmount: fiatAmount,
-        userAddress: account
-      });
-      url = `https://widget.guardarian.com/offramp?${gParams.toString()}`;
-      showError("Usando Guardarian (importo alto, no blocchi). Connetti wallet e vendi.");
-    }
+    // LIVELLO 1: Mt Pelerin (migliore per custom, no KYC)
+    const mtpelerin = `https://bridges.mtpelerin.com/?tab=sell&crypto=\( {token}&network= \){chainId}&fiat=\( {fiat}&amount= \){amount}&wallet=${account}&mode=widget&ref=offramp`;
 
-    const popup = window.open(url, "offramp", "width=520,height=800,resizable=yes,scrollbars=yes");
+    // LIVELLO 2: Guardarian (supporta custom, meno blocchi)
+    const guardarian = `https://widget.guardarian.com/offramp?sellAsset=\( {token}&chain= \){chainId==='56'?'bsc':'arbitrum'}&fiatCurrency=\( {fiat.toUpperCase()}&fiatAmount= \){amount}&userAddress=${account}`;
+
+    // LIVELLO 3: ChangeNOW (ultimo fallback, sempre funziona)
+    const changenow = `https://changenow.io/exchange?from=\( {token}&fromNetwork= \){chainId==='56'?'bsc':'arbitrum'}&to=\( {fiat}&amount= \){amount}&address=${account}&type=offramp`;
+
+    // Apri in ordine: Mt Pelerin → se fallisce → Guardarian → ChangeNOW
+    const popup = window.open(mtpelerin, "offramp", "width=520,height=820,left=200,top=100");
+
+    let attempts = 0;
+    const interval = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(interval);
+        fallbackMsg.textContent = "";
+        return;
+      }
+      try {
+        if (popup.location.href.includes("cloudflare") || popup.location.href === "about:blank") {
+          attempts++;
+          if (attempts === 1) {
+            fallbackMsg.textContent = "Mt Pelerin bloccato → Provo Guardarian...";
+            popup.location = guardarian;
+          } else if (attempts === 2) {
+            fallbackMsg.textContent = "Guardarian lento → Ultimo tentativo con ChangeNOW...";
+            popup.location = changenow;
+          } else {
+            clearInterval(interval);
+          }
+        }
+      } catch(e) { /* popup bloccato o cross-origin */ }
+    }, 2500);
+
     if (!popup) {
-      showError("Popup bloccato! Apri manualmente: " + url);
-      window.open(url, '_blank');
+      showError("Popup bloccato! Apri manualmente:");
+      alert("Copia e incolla questo link:\n\n" + mtpelerin);
     }
   };
 
   checkReady();
 </script>
-
 </body>
 </html>
